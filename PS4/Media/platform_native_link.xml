@@ -1,0 +1,18 @@
+<linker>
+	<assembly fullname="UnityEngine">
+
+		<!-- Events that come from the OS will trigger callbacks on these objects -->
+		<!-- Games should be acting on those events, but we make sure they are not -->
+		<!-- stripped so you don't have to worry about them for quick prototypes -->
+		<type fullname="UnityEngine.PS4.PS4Input" />
+		<type fullname="UnityEngine.PS4.Utility" />
+		<type fullname="UnityEngine.PS4.VR.HmdSetupDialog" />
+		<type fullname="UnityEngine.PS4.VR.PlayStationVRSettings" />
+		<type fullname="UnityEngine.PS4.VR.PlayStationVR" />
+
+	</assembly>
+	
+	<assembly fullname="mscorlib">
+		<type fullname="System.Exception" />
+	</assembly>
+</linker>
