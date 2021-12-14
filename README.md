@@ -27,3 +27,6 @@ Shout out to [Starkiller91](https://twitter.com/Starkiller91) for his icon pack
 
 
 ## Download
+![GitHub all releases](https://img.shields.io/github/downloads/xXxTheDarkprogramerxXx/PS4-PluginX/total)
+
+[Releases](https://github.com/xXxTheDarkprogramerxXx/PS4-PluginX/releases/tag/V1)
