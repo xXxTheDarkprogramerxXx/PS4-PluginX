@@ -53,6 +53,63 @@ public class Main : MonoBehaviour
         //Controler /\
         else if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Keypad8))
         {
+            string USB = "usb0";
+            string MainDir = "/mnt/" + USB + "/PluginX";
+            //replace the bgm file from usb
+            string _File = MainDir + "/bgm.at9";
+            string USB1 = "usb1";
+            MainDir = "/mnt/" + USB1 + "/PluginX";
+            string _File1 = MainDir + "/bgm.at9";
+
+
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                //temp working env
+                _File = @"C:\Users\3de Echelon\Downloads\OrbisTitleMetadataDatabase-master\OrbisTitleMetadataDatabase-master\OrbisTitleMetadataDatabase\bin\Debug\EP0001-CUSA00009_00-AC4GAMEPS4000001\snd0.at9";
+            }
+
+            //Set source 
+            //"C:\Users\3de Echelon\Desktop\ps4\system_ex\app\NPXS20001\systembgm\bgm_main.at9"
+            string source = "/system_ex/app/NPXS20001/systembgm/bgm_main.at9";
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                source = @"C:\TEMP\ps4\bgm_main.at9";
+            }
+            if (File.Exists(_File))
+            {
+                File.Copy(source, source + ".org");//make a backup of the orginal
+
+                string BeforeFIleName = Path.GetFileName(_File);
+
+                File.Copy(_File, source, true);
+
+                if (Application.platform == RuntimePlatform.PS4)
+                {
+                    Assets.Wrapper.MessageBox.Show("BGM Has been replaced");
+                }
+                return;
+            }
+            else if (File.Exists(_File1))
+            {
+                File.Copy(source, source + ".org");//make a backup of the orginal
+
+                string BeforeFIleName = Path.GetFileName(_File1);
+
+                File.Copy(_File1, source, true);
+
+                if (Application.platform == RuntimePlatform.PS4)
+                {
+                    Assets.Wrapper.MessageBox.Show("BGM Has been replaced");
+                }
+                return;
+            }
+            else
+            {
+                if (Application.platform == RuntimePlatform.PS4)
+                {
+                    Assets.Wrapper.MessageBox.Show("Could not load bgm.at9 from usb0 or usb1\nPlease ensure the file exists");
+                }
+            }
 
         }
         //Controler []
@@ -60,30 +117,59 @@ public class Main : MonoBehaviour
         {
             try
             {
-                
+
+                bool error = true;
+                string[] DIrs;
 
                 //create each and every file in the system so the user can replace from pc
-                string[] DIrs = System.IO.Directory.GetDirectories("/system_ex/app/", "*.*", SearchOption.TopDirectoryOnly);
+                if (Application.platform == RuntimePlatform.PS4)
+                {
+                    DIrs = System.IO.Directory.GetDirectories("/system_ex/app/", "*.*", SearchOption.TopDirectoryOnly);
+                }
+                else
+                {
+                    DIrs = System.IO.Directory.GetDirectories(@"C:\Users\3de Echelon\Desktop\ps4\system_ex\app\", "*.*", SearchOption.TopDirectoryOnly);
+                }
                 for (int i = 0; i < DIrs.Length; i++)
                 {
                     //usb 0
                     try
                     {
                         string USB = "usb0";
-                        string MainDir = "/mnt/"+USB+"/PluginX";
+                        string MainDir = "/mnt/" + USB + "/PluginX";
                         if (!Directory.Exists(MainDir))
                         {
                             Directory.CreateDirectory(MainDir);
                         }
-                        if(!Directory.Exists(MainDir + "/" + Path.GetDirectoryName(DIrs[i])))
+                        if (!Directory.Exists(MainDir + "/" + Path.GetFileName(DIrs[i])))
                         {
-                            Directory.CreateDirectory(MainDir + "/" + Path.GetDirectoryName(DIrs[i]));
+                            Directory.CreateDirectory(MainDir + "/" + Path.GetFileName(DIrs[i]));
                         }
-                        return;
-                    }
-                    catch(Exception ex)
-                    {
 
+                        //get all files from the folders
+                        List<string> pngfiels = System.IO.Directory.GetFiles(DIrs[i] + "/sce_sys", "*.png", SearchOption.AllDirectories).ToList();
+                        foreach (var item in pngfiels)
+                        {
+                            string savepath = MainDir + "/" + Path.GetFileName(DIrs[i]) + "/" + Path.GetFileName(item);
+
+                            File.Copy(item, savepath);
+                        }
+
+                        error = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        //if (ex.InnerException is AccessViolationException)
+                        //{
+
+                        //}
+                        //else
+                        //{
+                        //    if (Application.platform == RuntimePlatform.PS4)
+                        //    {
+                        //        Assets.Wrapper.MessageBox.Show("Error\n" + ex.Message + "\n\n" + ex.StackTrace);
+                        //    }
+                        //}
                     }
                     //usb 1
                     try
@@ -94,17 +180,68 @@ public class Main : MonoBehaviour
                         {
                             Directory.CreateDirectory(MainDir);
                         }
-                        if (!Directory.Exists(MainDir + "/" + Path.GetDirectoryName(DIrs[i])))
+                        if (!Directory.Exists(MainDir + "/" + Path.GetFileName(DIrs[i])))
                         {
-                            Directory.CreateDirectory(MainDir + "/" + Path.GetDirectoryName(DIrs[i]));
+                            Directory.CreateDirectory(MainDir + "/" + Path.GetFileName(DIrs[i]));
                         }
-                        return;
-                    }
-                    catch(Exception ex)
-                    {
 
+                        //get all files from the folders
+                        List<string> pngfiels = System.IO.Directory.GetFiles(DIrs[i] + "/sce_sys", "*.png", SearchOption.AllDirectories).ToList();
+                        foreach (var item in pngfiels)
+                        {
+                            string savepath = MainDir + "/" + Path.GetFileName(DIrs[i]) + "/" + Path.GetFileName(item);
+
+                            File.Copy(item, savepath);
+                        }
+
+
+                        error = false;
                     }
+                    catch (Exception ex)
+                    {
+                        //if (ex.InnerException is AccessViolationException)
+                        //{
+
+                        //}
+                        //else
+                        //{
+                        //    if (Application.platform == RuntimePlatform.PS4)
+                        //    {
+                        //        Assets.Wrapper.MessageBox.Show("Error\n" + ex.Message + "\n\n" + ex.StackTrace);
+                        //    }
+                        //}
+                    }
+                    if (Application.platform == RuntimePlatform.WindowsEditor)
+                    {
+                        string MainDir = "C:\\Temp\\PS4\\PluginX";
+                        if (!Directory.Exists(MainDir))
+                        {
+                            Directory.CreateDirectory(MainDir);
+                        }
+                        if (!Directory.Exists(MainDir + "\\" + Path.GetFileName(DIrs[i])))
+                        {
+                            Directory.CreateDirectory(MainDir + "\\" + Path.GetFileName(DIrs[i]));
+                        }
+                        //get all files from the folders
+                        List<string> pngfiels = System.IO.Directory.GetFiles(DIrs[i] + "\\sce_sys", "*.png", SearchOption.AllDirectories).ToList();
+                        foreach (var item in pngfiels)
+                        {
+                            string savepath = MainDir + "\\" + Path.GetFileName(DIrs[i]) + "\\" + Path.GetFileName(item);
+
+                            File.Copy(item, savepath);
+                        }
+
+
+                        error = false;
+                    }
+                }
+                if (error == true)
+                {
                     Assets.Wrapper.MessageBox.Show("Please connect a USB Device");
+                }
+                else
+                {
+                    Assets.Wrapper.MessageBox.Show("Directories created and files copied to USB replace any item and press R3 To change them on the system");
                 }
             }
             catch
@@ -166,18 +303,38 @@ public class Main : MonoBehaviour
             //Add a replace option
             if (Application.platform == RuntimePlatform.PS4)
             {
-                Assets.Wrapper.LoadingDialog.Show("Copying content from USB(s)");
+                //Assets.Wrapper.LoadingDialog.Show("Copying content from USB(s)");
             }
-            {
-                try
-                {
-                    {
 
-                        string[] files1 = System.IO.Directory.GetDirectories(@"/mnt/usb0/PluginX/UI", "*.*", SearchOption.TopDirectoryOnly);
-                        string[] files2 = System.IO.Directory.GetDirectories(@"/mnt/usb1/PluginX/UI", "*.*", SearchOption.TopDirectoryOnly);
+            try
+            {
+                {
+                    List<string> FilesReplaced = new List<string>();
+                    string[] files = null;
+
+                    try
+                    {
+                        string[] files1 = new string[0];
+                        string[] files2 = new string[0];
+                        try
+                        {
+                            files1 = System.IO.Directory.GetDirectories("/mnt/usb0/PluginX", "*.*", SearchOption.TopDirectoryOnly);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        try
+                        {
+                            files2 = System.IO.Directory.GetDirectories("/mnt/usb1/PluginX", "*.*", SearchOption.TopDirectoryOnly);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
 
                         //SendMessageToPS4("Files1:"+files1.Length.ToString() + "Files2:" + files2.Length.ToString());
-                        string[] files = new string[files1.Length + files2.Length];
+                        files = new string[files1.Length + files2.Length];
                         for (int i = 0; i < files.Length; i++)
                         {
                             if (i >= files1.Length)
@@ -185,54 +342,96 @@ public class Main : MonoBehaviour
                             else
                                 files[i] = files1[i];
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        Assets.Wrapper.MessageBox.Show("Error\n\n" + ex.Message);
+                    }
+                    if (Application.platform == RuntimePlatform.WindowsEditor)
+                    {
+                        files = System.IO.Directory.GetDirectories(@"C:\TEMP\ps4\PluginX", "*.*", SearchOption.TopDirectoryOnly);
+                    }
 
-                        //now copy them over
-                        for (int i = 0; i < files.Length; i++)
+                    if (files == null)
+                    {
+
+                        if (Application.platform == RuntimePlatform.PS4)
                         {
-                            try
+                            Assets.Wrapper.MessageBox.Show("No Files found");
+                        }
+                        return;
+                    }
+                    //now copy them over
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        try
+                        {
+                            //save the dir name
+                            string DirName = System.IO.Path.GetFileName(files[i]);
+
+                            //check if the files has a png 
+                            //check for PNG files
+                            if (Application.platform == RuntimePlatform.PS4)
                             {
-                                //save the dir name
-                                string DirName = System.IO.Path.GetDirectoryName(files[i]);
-
-                                //check if the files has a png 
-                                //check for PNG files
                                 Assets.Wrapper.LoadingDialog.Show("Getting Content for " + DirName);
-                                List<string> pngFiles = System.IO.Directory.GetFiles(files[i], "*.png", SearchOption.AllDirectories).ToList();
+                            }
+                            List<string> pngFiles = System.IO.Directory.GetFiles(files[i]+"/", "*.png", SearchOption.AllDirectories).ToList();
 
 
 
-                                for (int ix = 0; ix < pngFiles.Count; ix++)
+                            for (int ix = 0; ix < pngFiles.Count; ix++)
+                            {
+                                if (Application.platform == RuntimePlatform.PS4)
                                 {
+                                    Assets.Wrapper.LoadingDialog.Show("Getting icon files for " + DirName + " (" + ix.ToString() + "/" + pngFiles.Count.ToString() + ")");
+                                }
+                                //all items are in system_ex
+                                //copy and replace on the disk
 
-                                    Assets.Wrapper.LoadingDialog.Show("Getting icon files for " + DirName + " (" + ix + "/" + pngFiles.Count + ")");
-                                    //all items are in system_ex
-                                    //copy and replace on the disk
-
-                                    string _file = "/system_ex/app/" + DirName + "/" + System.IO.Path.GetFileName(pngFiles[i]);
-
-                                    if (File.Exists(_file))
+                                string _file = "/system_ex/app/" + DirName + "/sce_sys/" + System.IO.Path.GetFileName(pngFiles[ix]);
+                                if (Application.platform == RuntimePlatform.WindowsEditor)
+                                {
+                                    _file = @"C:\Users\3de Echelon\Desktop\ps4\system_ex\app\" + DirName + @"\sce_sys\" + System.IO.Path.GetFileName(pngFiles[ix]);
+                                }
+                                if (File.Exists(_file))
+                                {
+                                    var fi1 = new FileInfo(pngFiles[ix]);
+                                    var fi2 = new FileInfo(_file);
+                                    if (!Assets.Wrapper.FileUtil.FilesContentsAreEqual(fi1, fi2))
                                     {
-                                        File.Copy(pngFiles[i], _file, true);
+                                        FilesReplaced.Add(pngFiles[ix]);
+                                        File.Copy(pngFiles[ix], _file, true);
                                     }
                                 }
                             }
-                            catch (Exception ex)
-                            {
-
-                            }
-
+                        }
+                        catch (Exception ex)
+                        {
+                            Assets.Wrapper.MessageBox.Show(ex.Message + "\n\n"+ex.StackTrace);
                         }
 
                     }
-                }
-                catch (Exception ex)
-                {
+                    if (FilesReplaced.Count != 0)
+                    {
 
-                    Assets.Wrapper.MessageBox.Show("Error\n\n" + ex.Message);
-                    //SendMessageToPS4("No pkg files found on usb do you have a device inserted ?");
-                    //txtError.text = "Error process could not start " + ex.Message + "\n" + ex.Data + "\n" + ex.StackTrace;
+                        string Msg = "Files replaced \nReboot the system for the affect changes\n\nList Of Changed Files\n\n";
+                        string combined = string.Join(Environment.NewLine, FilesReplaced.ToArray());
+                        Assets.Wrapper.MessageBox.Show(Msg + combined);
+                    }
+                    else
+                    {
+                        Assets.Wrapper.MessageBox.Show("No files replaced either all files are the same or a usb is not connected");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+
+                Assets.Wrapper.MessageBox.Show("Error\n\n" + ex.Message);
+                //SendMessageToPS4("No pkg files found on usb do you have a device inserted ?");
+                //txtError.text = "Error process could not start " + ex.Message + "\n" + ex.Data + "\n" + ex.StackTrace;
+            }
+
 
             if (Application.platform == RuntimePlatform.PS4)
             {

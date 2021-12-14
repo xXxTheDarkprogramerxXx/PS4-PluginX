@@ -16,12 +16,12 @@ PlayerSettings:
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
-  m_ShowUnitySplashScreen: 1
+  m_ShowUnitySplashScreen: 0
   m_ShowUnitySplashLogo: 0
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
   m_SplashScreenLogoStyle: 1
-  m_SplashScreenDrawMode: 0
+  m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 1
   m_SplashScreenLogoAnimationZoom: 1
   m_SplashScreenBackgroundLandscapeAspect: 1.7777778
@@ -38,7 +38,9 @@ PlayerSettings:
     y: 0
     width: 1
     height: 1
-  m_SplashScreenLogos: []
+  m_SplashScreenLogos:
+  - logo: {fileID: 21300000, guid: 72dbb388935e6484c83e44d1f53d8a92, type: 3}
+    duration: 2
   m_VirtualRealitySplashScreen: {fileID: 2800000, guid: d3284f2380f377241823d896424254a4,
     type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -250,7 +252,7 @@ PlayerSettings:
   - m_BuildTarget: PS4
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 596755cb8f5088f408dd1ed277980fcb, type: 3}
+      m_Icon: {fileID: 2800000, guid: 06a2f8f961c393f46b320413ac76354a, type: 3}
       m_Width: 512
       m_Height: 512
       m_Kind: 0
@@ -439,7 +441,7 @@ PlayerSettings:
   ps4PronunciationXMLPath: 
   ps4PronunciationSIGPath: 
   ps4BackgroundImagePath: Assets/Background/background.png
-  ps4StartupImagePath: 
+  ps4StartupImagePath: Assets/Background/background.png
   ps4SaveDataImagePath: 
   ps4SdkOverride: 
   ps4BGMPath: 
