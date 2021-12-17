@@ -1,6 +1,0 @@
-Media\level0
-Media\level0.resS
-Media\sharedassets0.assets
-Media\Resources\mscorlib.dll-resources.dat
-Media\Resources\unity default resources
-Media\Resources\unity_builtin_extra
